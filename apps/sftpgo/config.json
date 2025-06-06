@@ -16,9 +16,11 @@
   "website": "https://sftpgo.com",
   "form_fields": [
     {
-      "type": "random",
+      "type": "password",
       "label": "Database password",
-      "min": 20,
+      "hint": "PostgreSQL password used by SFTPGo",
+      "placeholder": "sftpgo",
+      "required": true,
       "env_variable": "SFTPGO_DATABASE_PASSWORD"
     },
     {
