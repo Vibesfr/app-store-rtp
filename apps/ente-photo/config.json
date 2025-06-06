@@ -1,0 +1,55 @@
+{
+  "$schema": "../app-info-schema.json",
+  "id": "ente-photos",
+  "name": "Ente Photos",
+  "version": "latest",
+  "tipi_version": 1,
+  "categories": ["media", "photos"],
+  "port": 3000,
+  "available": true,
+  "exposable": true,
+  "dynamic_config": true,
+  "short_desc": "Stockage photo privé et chiffré de bout en bout",
+  "description": "Ente Photos est une alternative open-source à Google Photos, offrant un stockage chiffré de bout en bout, avec des applications mobiles et desktop, et une interface web moderne.",
+  "author": "Ente.io",
+  "source": "https://github.com/ente-io/ente",
+  "website": "https://ente.io",
+  "form_fields": [
+    {
+      "type": "text",
+      "label": "Nom d'utilisateur admin",
+      "placeholder": "admin",
+      "required": true,
+      "env_variable": "ENTE_ADMIN_USERNAME"
+    },
+    {
+      "type": "password",
+      "label": "Mot de passe admin",
+      "placeholder": "motdepassefort",
+      "required": true,
+      "env_variable": "ENTE_ADMIN_PASSWORD"
+    },
+    {
+      "type": "text",
+      "label": "Nom du bucket S3",
+      "placeholder": "ente-bucket",
+      "required": true,
+      "env_variable": "ENTE_S3_BUCKET"
+    },
+    {
+      "type": "text",
+      "label": "Clé d'accès S3",
+      "placeholder": "minioadmin",
+      "required": true,
+      "env_variable": "ENTE_S3_ACCESS_KEY"
+    },
+    {
+      "type": "password",
+      "label": "Clé secrète S3",
+      "placeholder": "minioadmin",
+      "required": true,
+      "env_variable": "ENTE_S3_SECRET_KEY"
+    }
+  ],
+  "supported_architectures": ["amd64", "arm64"]
+}
