@@ -1,1 +1,0 @@
-Ente Photos est une solution de stockage photo privée, chiffrée de bout en bout, et open-source. Elle offre des applications mobiles et desktop, ainsi qu'une interface web moderne.
