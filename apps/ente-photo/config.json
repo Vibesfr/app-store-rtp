@@ -1,7 +1,7 @@
 {
   "$schema": "../app-info-schema.json",
-  "id": "ente-photos",
-  "name": "Ente Photos",
+  "id": "ente-photo",
+  "name": "Ente Photo",
   "version": "latest",
   "tipi_version": 1,
   "categories": ["media", "photos"],
