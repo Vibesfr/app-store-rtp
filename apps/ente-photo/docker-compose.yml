@@ -1,0 +1,112 @@
+version: "3.8"
+
+services:
+  ente-server:
+    image: ghcr.io/ente-io/server:v0.1.14
+    container_name: ente-server
+    restart: unless-stopped
+    ports:
+      - ${APP_PORT}:8080
+    environment:
+      - ENTE_DB_HOST=ente-postgres
+      - ENTE_DB_PORT=5432
+      - ENTE_DB_NAME=ente_db
+      - ENTE_DB_USER=ente
+      - ENTE_DB_PASSWORD=${ENTE_DB_PASSWORD}
+      - ENTE_S3_ENDPOINT=http://ente-minio:9000
+      - ENTE_S3_ACCESS_KEY=${ENTE_S3_ACCESS_KEY}
+      - ENTE_S3_SECRET_KEY=${ENTE_S3_SECRET_KEY}
+      - ENTE_S3_BUCKET=ente-data
+      - ENTE_S3_REGION=us-east-1
+      - ENTE_ADMIN_EMAIL=${ENTE_ADMIN_EMAIL}
+      - ENTE_ADMIN_PASSWORD=${ENTE_ADMIN_PASSWORD}
+      - ENTE_JWT_SECRET=${ENTE_JWT_SECRET:-}
+      - ENTE_SIGNUP_DISABLED=${ENTE_SIGNUP_DISABLED:-false}
+      - ENTE_SMTP_HOST=${ENTE_SMTP_HOST:-}
+      - ENTE_SMTP_PORT=${ENTE_SMTP_PORT:-587}
+      - ENTE_SMTP_USERNAME=${ENTE_SMTP_USERNAME:-}
+      - ENTE_SMTP_PASSWORD=${ENTE_SMTP_PASSWORD:-}
+      - ENTE_SMTP_FROM=${ENTE_SMTP_FROM:-}
+    volumes:
+      - ${APP_DATA_DIR}/data/server:/data
+    depends_on:
+      - ente-postgres
+      - ente-minio
+    networks:
+      - tipi_main_network
+    labels:
+      # Main service
+      - traefik.enable=true
+      - traefik.http.middlewares.ente-web-redirect.redirectscheme.scheme=https
+      - traefik.http.services.ente.loadbalancer.server.port=8080
+      # Web
+      - traefik.http.routers.ente-insecure.rule=Host(`${APP_DOMAIN}`)
+      - traefik.http.routers.ente-insecure.entrypoints=web
+      - traefik.http.routers.ente-insecure.service=ente
+      - traefik.http.routers.ente-insecure.middlewares=ente-web-redirect
+      # Websecure
+      - traefik.http.routers.ente.rule=Host(`${APP_DOMAIN}`)
+      - traefik.http.routers.ente.entrypoints=websecure
+      - traefik.http.routers.ente.service=ente
+      - traefik.http.routers.ente.tls.certresolver=myresolver
+      # Local domain
+      - traefik.http.routers.ente-local-insecure.rule=Host(`ente-photos.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.ente-local-insecure.entrypoints=web
+      - traefik.http.routers.ente-local-insecure.service=ente
+      - traefik.http.routers.ente-local.rule=Host(`ente-photos.${LOCAL_DOMAIN}`)
+      - traefik.http.routers.ente-local.entrypoints=websecure
+      - traefik.http.routers.ente-local.service=ente
+      - traefik.http.routers.ente-local.tls=true
+      - runtipi.managed=true
+
+  ente-postgres:
+    image: postgres:15-alpine
+    container_name: ente-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=ente_db
+      - POSTGRES_USER=ente
+      - POSTGRES_PASSWORD=${ENTE_DB_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ${APP_DATA_DIR}/data/postgres:/var/lib/postgresql/data
+    networks:
+      - tipi_main_network
+    labels:
+      - runtipi.managed=true
+
+  ente-minio:
+    image: minio/minio:latest
+    container_name: ente-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=${ENTE_S3_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${ENTE_S3_SECRET_KEY}
+    volumes:
+      - ${APP_DATA_DIR}/data/minio:/data
+    networks:
+      - tipi_main_network
+    labels:
+      - runtipi.managed=true
+
+  ente-createbuckets:
+    image: minio/mc:latest
+    container_name: ente-createbuckets
+    depends_on:
+      - ente-minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://ente-minio:9000 ${ENTE_S3_ACCESS_KEY} ${ENTE_S3_SECRET_KEY};
+      /usr/bin/mc mb myminio/ente-data;
+      /usr/bin/mc policy set public myminio/ente-data;
+      exit 0;
+      "
+    networks:
+      - tipi_main_network
+    labels:
+      - runtipi.managed=true
+
+networks:
+  tipi_main_network:
+    external: true

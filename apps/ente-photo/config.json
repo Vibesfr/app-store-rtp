@@ -1,0 +1,59 @@
+{
+  "name": "Ente Photos",
+  "id": "ente-photos",
+  "available": true,
+  "port": 8080,
+  "exposable": true,
+  "no_gui": false,
+  "supported_architectures": ["amd64", "arm64"],
+  "created_at": 1640995200,
+  "updated_at": 1640995200,
+  "version": "0.1.14",
+  "categories": ["photography", "media"],
+  "description": "Open source, end-to-end encrypted alternative to Google Photos",
+  "tipi_version": 1,
+  "short_desc": "Privacy-focused photo storage with end-to-end encryption",
+  "author": "Ente",
+  "source": "https://github.com/ente-io/ente",
+  "website": "https://ente.io",
+  "force_expose": false,
+  "generate_vapid_keys": false,
+  "dynamic_config": false,
+  "min_tipi_version": "3.0.0",
+  "form_fields": [
+    {
+      "type": "text",
+      "label": "Admin Email",
+      "max": 50,
+      "min": 3,
+      "required": true,
+      "env_variable": "ENTE_ADMIN_EMAIL",
+      "hint": "Email address for the admin account"
+    },
+    {
+      "type": "password",
+      "label": "Admin Password",
+      "max": 50,
+      "min": 8,
+      "required": true,
+      "env_variable": "ENTE_ADMIN_PASSWORD",
+      "hint": "Password for the admin account (minimum 8 characters)"
+    },
+    {
+      "type": "text",
+      "label": "JWT Secret",
+      "max": 100,
+      "min": 32,
+      "required": false,
+      "env_variable": "ENTE_JWT_SECRET",
+      "hint": "JWT secret key (leave empty to auto-generate)"
+    },
+    {
+      "type": "boolean",
+      "label": "Enable Registration",
+      "required": false,
+      "env_variable": "ENTE_SIGNUP_DISABLED",
+      "hint": "Allow new users to register accounts"
+    }
+  ]
+}
