@@ -1,0 +1,27 @@
+{
+  "id": "sftpgo",
+  "name": "SFTPGo",
+  "available": true,
+  "port": 8080,
+  "tipi_version": 1,
+  "version": "2.5.6",
+  "categories": ["storage"],
+  "short_desc": "Modern SFTP server with web UI, REST API, and WebDAV.",
+  "description": "SFTPGo is a fully-featured and highly configurable SFTP server with optional HTTP/S, FTP/S, and WebDAV support. It comes with a modern web-based user interface and a REST API.",
+  "author": "drakkan",
+  "source": "https://github.com/drakkan/sftpgo",
+  "form_fields": [
+    {
+      "id": "SFTPGO_DEFAULT_ADMIN_USERNAME",
+      "label": "Admin Username",
+      "type": "text",
+      "default": "admin"
+    },
+    {
+      "id": "SFTPGO_DEFAULT_ADMIN_PASSWORD",
+      "label": "Admin Password",
+      "type": "password",
+      "default": "changeme"
+    }
+  ]
+}
