@@ -1,0 +1,40 @@
+id: sftpgo
+name: SFTPGo
+icon: https://raw.githubusercontent.com/drakkan/sftpgo/main/docs/logo.svg
+description: Fully-featured and modern SFTP server with web interface and REST API.
+version: "2.5.6"  # Update if needed
+type: app
+category: storage
+developer: drakkan
+website: https://github.com/drakkan/sftpgo
+support: https://github.com/drakkan/sftpgo/discussions
+repo: https://github.com/drakkan/sftpgo
+image: drakkan/sftpgo:latest
+defaultPort: 8080
+env:
+  - name: SFTPGO_WEBDAVD__BINDINGS__0__PORT
+    value: "10080"
+  - name: SFTPGO_HTTPD__BINDINGS__0__PORT
+    value: "8080"
+  - name: SFTPGO_DEFAULT_ADMIN_USERNAME
+    value: admin
+  - name: SFTPGO_DEFAULT_ADMIN_PASSWORD
+    value: changeme
+volumes:
+  - name: data
+    mountPath: /var/lib/sftpgo
+  - name: config
+    mountPath: /etc/sftpgo
+  - name: home
+    mountPath: /srv/sftpgo
+ports:
+  - port: 8080
+    description: Web admin UI
+  - port: 2022
+    description: SFTP
+  - port: 10080
+    description: WebDAV (optional)
+tips:
+  - 🔒 Default admin user is `admin` with password `changeme`. Please change it!
+  - 📁 Upload your data via SFTP (port 2022), WebDAV (port 10080), or the Web UI (port 8080).
+  - 🌐 The web UI is available at `http://<your-host>:8080`.
