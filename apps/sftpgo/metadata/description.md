@@ -1,0 +1,1 @@
+SFTPGo is a fully-featured and highly configurable SFTP server with optional HTTP/S, FTP/S, and WebDAV support. It comes with a modern web-based user interface and a REST API, allowing for easy management and integration.
